@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const initialFriends = [
   {
     id: 118836,
@@ -20,27 +22,45 @@ const initialFriends = [
 ];
 
 export default function App() {
+  return <EatNSplit />;
+}
+
+function EatNSplit() {
+  const [selectedFriend, setSelectedFriend] = useState(null);
+
+  function handleSelectedFriend(id) {
+    setSelectedFriend(selectedFriend === id ? null : id);
+  }
+
   return (
     <div className="app">
-      <Sidebar />
+      <Sidebar
+        selectedFriend={selectedFriend}
+        onSelectedFriend={handleSelectedFriend}
+      />
       <SplitBillForm />
     </div>
   );
 }
 
-function Sidebar() {
+function Sidebar({ selectedFriend, onSelectedFriend }) {
   return (
     <div className="sidebar">
       {initialFriends.map((friend) => (
-        <Friend friend={friend} key={friend.id} />
+        <Friend
+          friend={friend}
+          key={friend.id}
+          isSelected={selectedFriend === friend.id}
+          onSelectedFriend={onSelectedFriend}
+        />
       ))}
       <AddFriendForm />
     </div>
   );
 }
 
-function Friend({ friend }) {
-  const { name, image, balance } = friend;
+function Friend({ friend, isSelected, onSelectedFriend }) {
+  const { id, name, image, balance } = friend;
 
   let message = "";
 
@@ -49,13 +69,15 @@ function Friend({ friend }) {
   else message = `You and ${name} are even`;
 
   return (
-    <li>
+    <li className={isSelected ? "selected" : ""}>
       <img src={image} />
       <h3>{name}</h3>
       <p className={balance == 0 ? "" : balance > 0 ? "green" : "red"}>
         {message}
       </p>
-      <Button>Select</Button>
+      <Button onClick={() => onSelectedFriend(id)}>
+        {isSelected ? "Close" : "Select"}
+      </Button>
     </li>
   );
 }
@@ -68,6 +90,10 @@ function SplitBillForm() {
   return <form className="form-split-bill"></form>;
 }
 
-function Button({ children }) {
-  return <button className="button">{children}</button>;
+function Button({ onClick, children }) {
+  return (
+    <button onClick={onClick} className="button">
+      {children}
+    </button>
+  );
 }
