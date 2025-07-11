@@ -55,6 +55,7 @@ function Friend({ friend }) {
       <p className={balance == 0 ? "" : balance > 0 ? "green" : "red"}>
         {message}
       </p>
+      <Button>Select</Button>
     </li>
   );
 }
@@ -65,4 +66,8 @@ function AddFriendForm() {
 
 function SplitBillForm() {
   return <form className="form-split-bill"></form>;
+}
+
+function Button({ children }) {
+  return <button className="button">{children}</button>;
 }
