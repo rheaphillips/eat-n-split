@@ -38,7 +38,7 @@ function EatNSplit() {
         selectedFriend={selectedFriend}
         onSelectedFriend={handleSelectedFriend}
       />
-      <SplitBillForm />
+      {selectedFriend && <SplitBillForm />}
     </div>
   );
 }
