@@ -31,11 +31,15 @@ function EatNSplit() {
     setSelectedFriend(selectedFriend === id ? null : id);
   }
 
+  function handleAddFriend(friend) {
+    setFriends([...friends, friend]);
+  }
+
   return (
     <div className="app">
       <Sidebar
         friends={friends}
-        setFriends={setFriends}
+        onAddFriend={handleAddFriend}
         selectedFriend={selectedFriend}
         onSelectedFriend={handleSelectedFriend}
       />
@@ -44,7 +48,7 @@ function EatNSplit() {
   );
 }
 
-function Sidebar({ friends, setFriends, selectedFriend, onSelectedFriend }) {
+function Sidebar({ friends, onAddFriend, selectedFriend, onSelectedFriend }) {
   const [isAddingFriend, setIsAddingFriend] = useState(false);
 
   function handleIsAddingFriend() {
@@ -53,16 +57,21 @@ function Sidebar({ friends, setFriends, selectedFriend, onSelectedFriend }) {
 
   return (
     <div className="sidebar">
-      {friends.map((friend) => (
-        <Friend
-          friend={friend}
-          key={friend.id}
-          isSelected={selectedFriend === friend.id}
-          onSelectedFriend={onSelectedFriend}
-        />
-      ))}
+      <ul>
+        {friends.map((friend) => (
+          <Friend
+            friend={friend}
+            key={friend.id}
+            isSelected={selectedFriend === friend.id}
+            onSelectedFriend={onSelectedFriend}
+          />
+        ))}
+      </ul>
       {isAddingFriend ? (
-        <AddFriendForm onIsAddingFriend={handleIsAddingFriend} />
+        <AddFriendForm
+          onAddFriend={onAddFriend}
+          onIsAddingFriend={handleIsAddingFriend}
+        />
       ) : (
         <Button onClick={handleIsAddingFriend}>Add friend</Button>
       )}
@@ -93,14 +102,27 @@ function Friend({ friend, isSelected, onSelectedFriend }) {
   );
 }
 
-function AddFriendForm({ onIsAddingFriend }) {
+function AddFriendForm({ onAddFriend, onIsAddingFriend }) {
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
+
+  function submitFriend() {
+    onAddFriend({
+      id: new Date().getTime(),
+      name: name,
+      image: image,
+      balance: 0,
+    });
+    onIsAddingFriend();
+  }
+
   return (
     <form className="form-add-friend">
       <label>👬 Friend name</label>
-      <input></input>
+      <input value={name} onChange={(e) => setName(e.target.value)}></input>
       <label>🌄 Image URL</label>
-      <input></input>
-      <Button onClick={onIsAddingFriend}>Add</Button>
+      <input value={image} onChange={(e) => setImage(e.target.value)}></input>
+      <Button onClick={submitFriend}>Add</Button>
     </form>
   );
 }
