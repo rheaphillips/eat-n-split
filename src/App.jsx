@@ -1,32 +1,31 @@
 import { useState } from "react";
 
-const initialFriends = [
-  {
-    id: 118836,
-    name: "Clark",
-    image: "https://i.pravatar.cc/48?u=118836",
-    balance: -7,
-  },
-  {
-    id: 933372,
-    name: "Sarah",
-    image: "https://i.pravatar.cc/48?u=933372",
-    balance: 20,
-  },
-  {
-    id: 499476,
-    name: "Anthony",
-    image: "https://i.pravatar.cc/48?u=499476",
-    balance: 0,
-  },
-];
-
 export default function App() {
   return <EatNSplit />;
 }
 
 function EatNSplit() {
   const [selectedFriend, setSelectedFriend] = useState(null);
+  const [friends, setFriends] = useState([
+    {
+      id: 118836,
+      name: "Clark",
+      image: "https://i.pravatar.cc/48?u=118836",
+      balance: -7,
+    },
+    {
+      id: 933372,
+      name: "Sarah",
+      image: "https://i.pravatar.cc/48?u=933372",
+      balance: 20,
+    },
+    {
+      id: 499476,
+      name: "Anthony",
+      image: "https://i.pravatar.cc/48?u=499476",
+      balance: 0,
+    },
+  ]);
 
   function handleSelectedFriend(id) {
     setSelectedFriend(selectedFriend === id ? null : id);
@@ -35,6 +34,8 @@ function EatNSplit() {
   return (
     <div className="app">
       <Sidebar
+        friends={friends}
+        setFriends={setFriends}
         selectedFriend={selectedFriend}
         onSelectedFriend={handleSelectedFriend}
       />
@@ -43,7 +44,7 @@ function EatNSplit() {
   );
 }
 
-function Sidebar({ selectedFriend, onSelectedFriend }) {
+function Sidebar({ friends, setFriends, selectedFriend, onSelectedFriend }) {
   const [isAddingFriend, setIsAddingFriend] = useState(false);
 
   function handleIsAddingFriend() {
@@ -52,7 +53,7 @@ function Sidebar({ selectedFriend, onSelectedFriend }) {
 
   return (
     <div className="sidebar">
-      {initialFriends.map((friend) => (
+      {friends.map((friend) => (
         <Friend
           friend={friend}
           key={friend.id}
@@ -61,7 +62,7 @@ function Sidebar({ selectedFriend, onSelectedFriend }) {
         />
       ))}
       {isAddingFriend ? (
-        <AddFriendForm />
+        <AddFriendForm onIsAddingFriend={handleIsAddingFriend} />
       ) : (
         <Button onClick={handleIsAddingFriend}>Add friend</Button>
       )}
@@ -92,8 +93,16 @@ function Friend({ friend, isSelected, onSelectedFriend }) {
   );
 }
 
-function AddFriendForm() {
-  return <form className="form-add-friend"></form>;
+function AddFriendForm({ onIsAddingFriend }) {
+  return (
+    <form className="form-add-friend">
+      <label>👬 Friend name</label>
+      <input></input>
+      <label>🌄 Image URL</label>
+      <input></input>
+      <Button onClick={onIsAddingFriend}>Add</Button>
+    </form>
+  );
 }
 
 function SplitBillForm() {
