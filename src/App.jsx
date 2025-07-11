@@ -5,7 +5,7 @@ export default function App() {
 }
 
 function EatNSplit() {
-  const [selectedFriend, setSelectedFriend] = useState(null);
+  const [selectedFriend, setSelectedFriend] = useState(false);
   const [friends, setFriends] = useState([
     {
       id: 118836,
@@ -27,6 +27,10 @@ function EatNSplit() {
     },
   ]);
 
+  const selectedFriendName = friends.find(
+    (friend) => friend.id === selectedFriend
+  )?.name;
+
   function handleSelectedFriend(id) {
     setSelectedFriend(selectedFriend === id ? null : id);
   }
@@ -43,7 +47,7 @@ function EatNSplit() {
         selectedFriend={selectedFriend}
         onSelectedFriend={handleSelectedFriend}
       />
-      {selectedFriend && <SplitBillForm />}
+      {selectedFriend && <SplitBillForm selectedFriend={selectedFriendName} />}
     </div>
   );
 }
@@ -129,8 +133,24 @@ function AddFriendForm({ onAddFriend, onIsAddingFriend }) {
   );
 }
 
-function SplitBillForm() {
-  return <form className="form-split-bill"></form>;
+function SplitBillForm({ selectedFriend }) {
+  return (
+    <form className="form-split-bill">
+      <h2>SPLIT A BILL WITH {selectedFriend.toUpperCase()}</h2>
+      <label>💰 Bill value</label>
+      <input></input>
+      <label>🧍‍♀️ Your expense</label>
+      <input></input>
+      <label>👬 {selectedFriend}'s expense</label>
+      <input></input>
+      <label>🤑 Who is paying the bill?</label>
+      <select>
+        <option>You</option>
+        <option>{selectedFriend}</option>
+      </select>
+      <Button>Split Bill</Button>
+    </form>
+  );
 }
 
 function Button({ onClick, children }) {
