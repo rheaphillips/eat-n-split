@@ -44,6 +44,12 @@ function EatNSplit() {
 }
 
 function Sidebar({ selectedFriend, onSelectedFriend }) {
+  const [isAddingFriend, setIsAddingFriend] = useState(false);
+
+  function handleIsAddingFriend() {
+    setIsAddingFriend((isAddingFriend) => !isAddingFriend);
+  }
+
   return (
     <div className="sidebar">
       {initialFriends.map((friend) => (
@@ -54,7 +60,11 @@ function Sidebar({ selectedFriend, onSelectedFriend }) {
           onSelectedFriend={onSelectedFriend}
         />
       ))}
-      <AddFriendForm />
+      {isAddingFriend ? (
+        <AddFriendForm />
+      ) : (
+        <Button onClick={handleIsAddingFriend}>Add friend</Button>
+      )}
     </div>
   );
 }
