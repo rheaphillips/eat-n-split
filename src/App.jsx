@@ -103,12 +103,14 @@ function Friend({ friend, isSelected, onSelectedFriend }) {
 }
 
 function AddFriendForm({ onAddFriend, onIsAddingFriend }) {
+  let id = new Date().getTime();
+
   const [name, setName] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(`https://i.pravatar.cc/48?u=${id}`);
 
   function submitFriend() {
     onAddFriend({
-      id: new Date().getTime(),
+      id: id,
       name: name,
       image: image,
       balance: 0,
