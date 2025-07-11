@@ -52,7 +52,9 @@ function Friend({ friend }) {
     <li>
       <img src={image} />
       <h3>{name}</h3>
-      <p>{message}</p>
+      <p className={balance == 0 ? "" : balance > 0 ? "green" : "red"}>
+        {message}
+      </p>
     </li>
   );
 }
