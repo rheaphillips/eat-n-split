@@ -20,5 +20,47 @@ const initialFriends = [
 ];
 
 export default function App() {
-  return <div>Eat 'N Split</div>;
+  return (
+    <div className="app">
+      <Sidebar />
+      <SplitBillForm />
+    </div>
+  );
+}
+
+function Sidebar() {
+  return (
+    <div className="sidebar">
+      {initialFriends.map((friend) => (
+        <Friend friend={friend} key={friend.id} />
+      ))}
+      <AddFriendForm />
+    </div>
+  );
+}
+
+function Friend({ friend }) {
+  const { name, image, balance } = friend;
+
+  let message = "";
+
+  if (balance < 0) message = `You owe ${name} $${Math.abs(balance)}`;
+  else if (balance > 0) message = `${name} owes you $${Math.abs(balance)}`;
+  else message = `You and ${name} are even`;
+
+  return (
+    <li>
+      <img src={image} />
+      <h3>{name}</h3>
+      <p>{message}</p>
+    </li>
+  );
+}
+
+function AddFriendForm() {
+  return <form className="form-add-friend"></form>;
+}
+
+function SplitBillForm() {
+  return <form className="form-split-bill"></form>;
 }
