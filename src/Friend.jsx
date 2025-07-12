@@ -3,17 +3,25 @@ export default function Friend({ friend, isSelected, onSelectedID }) {
 
   let message = "";
 
-  if (balance < 0) message = `You owe ${name} $${Math.abs(balance)}`;
-  else if (balance > 0) message = `${name} owes you $${Math.abs(balance)}`;
-  else message = `You and ${name} are even`;
+  if (balance < 0)
+    message = (
+      <p className="red">
+        You owe {name} ${Math.abs(balance)}
+      </p>
+    );
+  else if (balance > 0)
+    message = (
+      <p className="green">
+        {name} owes you ${Math.abs(balance)}
+      </p>
+    );
+  else message = <p>You and {name} are even</p>;
 
   return (
     <li className={isSelected ? "selected" : ""}>
-      <img src={image} />
+      <img src={image} alt={name} />
       <h3>{name}</h3>
-      <p className={balance == 0 ? "" : balance > 0 ? "green" : "red"}>
-        {message}
-      </p>
+      {message}
       <button className="button" onClick={() => onSelectedID(id)}>
         {isSelected ? "Close" : "Select"}
       </button>
