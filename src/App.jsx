@@ -5,7 +5,7 @@ export default function App() {
 }
 
 function EatNSplit() {
-  const [selectedFriend, setSelectedFriend] = useState(false);
+  const [selectedID, setSelectedID] = useState(null);
   const [friends, setFriends] = useState([
     {
       id: 118836,
@@ -27,32 +27,46 @@ function EatNSplit() {
     },
   ]);
 
-  const selectedFriendName = friends.find(
-    (friend) => friend.id === selectedFriend
-  )?.name;
-
-  function handleSelectedFriend(id) {
-    setSelectedFriend(selectedFriend === id ? null : id);
+  function handleSelectedID(id) {
+    setSelectedID(selectedID === id ? null : id);
   }
 
   function handleAddFriend(friend) {
     setFriends([...friends, friend]);
   }
 
+  function handleUpdateBalance(balance) {
+    setFriends(
+      friends.map((friend) =>
+        friend.id === selectedID ? { ...friend, balance } : friend
+      )
+    );
+  }
+
+  const selectedFriend = friends.find(
+    (friend) => friend.id === selectedID
+  )?.name;
+
   return (
     <div className="app">
       <Sidebar
         friends={friends}
         onAddFriend={handleAddFriend}
-        selectedFriend={selectedFriend}
-        onSelectedFriend={handleSelectedFriend}
+        selectedID={selectedID}
+        onSelectedID={handleSelectedID}
       />
-      {selectedFriend && <SplitBillForm selectedFriend={selectedFriendName} />}
+      {selectedID && (
+        <SplitBillForm
+          selectedFriend={selectedFriend}
+          onSelectedID={handleSelectedID}
+          onUpdateBalance={handleUpdateBalance}
+        />
+      )}
     </div>
   );
 }
 
-function Sidebar({ friends, onAddFriend, selectedFriend, onSelectedFriend }) {
+function Sidebar({ friends, onAddFriend, selectedID, onSelectedID }) {
   const [isAddingFriend, setIsAddingFriend] = useState(false);
 
   function handleIsAddingFriend() {
@@ -66,8 +80,8 @@ function Sidebar({ friends, onAddFriend, selectedFriend, onSelectedFriend }) {
           <Friend
             friend={friend}
             key={friend.id}
-            isSelected={selectedFriend === friend.id}
-            onSelectedFriend={onSelectedFriend}
+            isSelected={selectedID === friend.id}
+            onSelectedID={onSelectedID}
           />
         ))}
       </ul>
@@ -83,7 +97,7 @@ function Sidebar({ friends, onAddFriend, selectedFriend, onSelectedFriend }) {
   );
 }
 
-function Friend({ friend, isSelected, onSelectedFriend }) {
+function Friend({ friend, isSelected, onSelectedID }) {
   const { id, name, image, balance } = friend;
 
   let message = "";
@@ -99,7 +113,7 @@ function Friend({ friend, isSelected, onSelectedFriend }) {
       <p className={balance == 0 ? "" : balance > 0 ? "green" : "red"}>
         {message}
       </p>
-      <Button onClick={() => onSelectedFriend(id)}>
+      <Button onClick={() => onSelectedID(id)}>
         {isSelected ? "Close" : "Select"}
       </Button>
     </li>
@@ -112,7 +126,7 @@ function AddFriendForm({ onAddFriend, onIsAddingFriend }) {
   const [name, setName] = useState("");
   const [image, setImage] = useState(`https://i.pravatar.cc/48?u=${id}`);
 
-  function submitFriend() {
+  function handleAddFriend() {
     onAddFriend({
       id: id,
       name: name,
@@ -128,12 +142,12 @@ function AddFriendForm({ onAddFriend, onIsAddingFriend }) {
       <input value={name} onChange={(e) => setName(e.target.value)}></input>
       <label>🌄 Image URL</label>
       <input value={image} onChange={(e) => setImage(e.target.value)}></input>
-      <Button onClick={submitFriend}>Add</Button>
+      <Button onClick={handleAddFriend}>Add</Button>
     </form>
   );
 }
 
-function SplitBillForm({ selectedFriend }) {
+function SplitBillForm({ selectedFriend, onUpdateBalance, onSelectedID }) {
   return (
     <form className="form-split-bill">
       <h2>SPLIT A BILL WITH {selectedFriend.toUpperCase()}</h2>
@@ -148,7 +162,15 @@ function SplitBillForm({ selectedFriend }) {
         <option>You</option>
         <option>{selectedFriend}</option>
       </select>
-      <Button>Split Bill</Button>
+      <Button
+        onClick={(e) => {
+          e.preventDefault();
+          onUpdateBalance(50);
+          onSelectedID();
+        }}
+      >
+        Split Bill
+      </Button>
     </form>
   );
 }
