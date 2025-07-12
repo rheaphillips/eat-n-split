@@ -1,10 +1,6 @@
 import { useState } from "react";
 
-export default function SplitBillForm({
-  selectedFriend,
-  onUpdateBalance,
-  onSelectedID,
-}) {
+export default function SplitBillForm({ selectedFriend, onUpdateBalance }) {
   const [bill, setBill] = useState(0);
   const [yourExpense, setYourExpense] = useState("");
   const [payer, setPayer] = useState("You");
@@ -18,7 +14,6 @@ export default function SplitBillForm({
       className="form-split-bill"
       onSubmit={() => {
         onUpdateBalance(payer === "You" ? bill - yourExpense : -yourExpense);
-        onSelectedID();
       }}
     >
       <h2>SPLIT A BILL WITH {selectedFriend.toUpperCase()}</h2>

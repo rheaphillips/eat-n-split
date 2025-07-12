@@ -41,6 +41,7 @@ export default function EatNSplit() {
           : friend
       )
     );
+    setSelectedID(null);
   }
 
   const selectedFriend = friends.find(
@@ -58,7 +59,6 @@ export default function EatNSplit() {
       {selectedID && (
         <SplitBillForm
           selectedFriend={selectedFriend}
-          onSelectedID={handleSelectedID}
           onUpdateBalance={handleUpdateBalance}
         />
       )}
