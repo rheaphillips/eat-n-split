@@ -148,7 +148,6 @@ function AddFriendForm({ onAddFriend, onIsAddingFriend }) {
 }
 
 function SplitBillForm({ selectedFriend, onUpdateBalance, onSelectedID }) {
-  const [bill, setBill] = useState("");
   const [yourExpense, setYourExpense] = useState("");
   const [friendExpense, setFriendExpense] = useState("");
   const [payer, setPayer] = useState("You");
@@ -162,22 +161,26 @@ function SplitBillForm({ selectedFriend, onUpdateBalance, onSelectedID }) {
       <h2>SPLIT A BILL WITH {selectedFriend.toUpperCase()}</h2>
       <label>💰 Bill value</label>
       <input
-        value={bill}
-        onChange={(e) => setBill(setValidNumber(e.target.value))}
+        value={setValidNumber(yourExpense + friendExpense)}
+        onChange={(e) => {
+          const expense = setValidNumber(e.target.value) - friendExpense;
+          if (expense < 0) {
+            setYourExpense(setValidNumber(e.target.value));
+            setFriendExpense(0);
+          } else setYourExpense(expense);
+        }}
       ></input>
       <label>🧍‍♀️ Your expense</label>
       <input
         value={yourExpense}
         onChange={(e) => {
           setYourExpense(setValidNumber(e.target.value));
-          setFriendExpense(bill - setValidNumber(e.target.value));
         }}
       ></input>
       <label>👬 {selectedFriend}'s expense</label>
       <input
         value={friendExpense}
         onChange={(e) => {
-          setYourExpense(bill - setValidNumber(e.target.value));
           setFriendExpense(setValidNumber(e.target.value));
         }}
       ></input>
