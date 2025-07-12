@@ -26,7 +26,7 @@ export default function EatNSplit() {
   ]);
 
   function handleSelectedID(id) {
-    setSelectedID(selectedID === id ? null : id);
+    setSelectedID((selectedID) => (selectedID === id ? null : id));
   }
 
   function handleAddFriend(friend) {
@@ -36,7 +36,9 @@ export default function EatNSplit() {
   function handleUpdateBalance(balance) {
     setFriends(
       friends.map((friend) =>
-        friend.id === selectedID ? { ...friend, balance } : friend
+        friend.id === selectedID
+          ? { ...friend, balance: friend.balance + balance }
+          : friend
       )
     );
   }

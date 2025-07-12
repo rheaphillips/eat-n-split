@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function AddFriendForm({ onAddFriend, onIsAddingFriend }) {
-  let id = crypto.randomUUID;
+  let id = new Date().getTime();
 
   const [name, setName] = useState("");
   const [image, setImage] = useState(`https://i.pravatar.cc/48?`);
