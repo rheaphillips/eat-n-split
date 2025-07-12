@@ -12,7 +12,7 @@ export default function Friend({ friend, isSelected, onSelectedID }) {
   else if (balance > 0)
     message = (
       <p className="green">
-        {name} owes you ${Math.abs(balance)}
+        {name} owes you ${balance}
       </p>
     );
   else message = <p>You and {name} are even</p>;

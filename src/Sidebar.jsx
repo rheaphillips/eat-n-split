@@ -26,16 +26,15 @@ export default function Sidebar({
           />
         ))}
       </ul>
-      {isAddingFriend ? (
+      {isAddingFriend && (
         <AddFriendForm
           onAddFriend={onAddFriend}
           onIsAddingFriend={handleIsAddingFriend}
         />
-      ) : (
-        <button className="button" onClick={handleIsAddingFriend}>
-          Add friend
-        </button>
       )}
+      <button className="button" onClick={handleIsAddingFriend}>
+        {isAddingFriend ? "Close" : "Add friend"}
+      </button>
     </div>
   );
 }

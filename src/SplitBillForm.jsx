@@ -45,8 +45,8 @@ export default function SplitBillForm({
       ></input>
       <label>🤑 Who is paying the bill?</label>
       <select value={payer} onChange={(e) => setPayer(e.target.value)}>
-        <option>You</option>
-        <option>{selectedFriend}</option>
+        <option value="You">You</option>
+        <option value="Friend">{selectedFriend}</option>
       </select>
       <button className="button">Split Bill</button>
     </form>
